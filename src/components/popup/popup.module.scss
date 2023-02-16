@@ -1,0 +1,148 @@
+.popup {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  
+  .popup_content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+    max-width: 60%;
+    
+
+    .popup_title {
+      font-size: 1.8rem;
+      color: rgba(0, 0, 0, 1);
+      font-weight: 600;
+    }
+
+    .popup_body {
+
+      .divHasImage {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: .5em 0;
+        height: 80px;
+
+        .preview_div {
+          height: inherit;
+          flex: 2;
+          position: relative;
+          
+          img {
+            position: absolute;
+            height: inherit;
+            width: 80px;
+            object-fit: cover;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(0, 0, 0, 0.35);
+            border-radius: 3px;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+          }
+        }
+      }
+
+
+      div {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        padding: .5em 0;
+
+        label {
+          flex-basis: 75px;
+          font-size: 1.4rem;
+          text-align: left;
+        }
+
+        input {
+          padding: .5em 0;
+          flex: 4;
+          border-radius: 4px;
+        }
+
+        input:focus {
+          outline: 1px solid var(--primary-color);
+        }
+      }
+
+      form {
+        ul {
+          li {
+            color: red;
+            font-size: 1.2rem;
+          }
+        }
+      }
+    }
+
+    .popup_footer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      button:first-child {
+        cursor: pointer;
+        margin: 0 1em;
+        padding: 0.8em 1em;
+        border-radius: 3px;
+        border: none;
+        background: var(--primary-color);
+        color: white;
+      }
+
+      .btn_cancel {
+        cursor: pointer;
+        margin: 0 1em;
+        padding: 0.8em 1em;
+        border-radius: 3px;
+        border: none;
+      }
+
+      button:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .btn_add_shipper {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    border: none;
+    background: none;
+    cursor: pointer;
+
+    svg {
+      box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.25);
+      border-radius: 50%;
+      border: none;
+      background: var(--primary-color);
+      color: white;
+    }
+
+    svg:hover {
+      transform: rotateZ(45deg);
+      transition: all 0.2s ease-in;
+    }
+  }
+
+  
+
+ 
+  
+  

@@ -14,22 +14,22 @@ function Sidebar() {
   return (
     <div className={styles.sidebar_container}>
       <div className={styles.sidebar_top}>
-        <Link to="/admin/shipper">
+        <Link to="/admin/shipper" state="> Quản lý shipper">
           <MdGroups size={28} style={{ marginRight: "1.6em" }} />
           Quản lý shipper
         </Link>
-        <Link to="/admin/order">
+        <Link to="/admin/order" state="> Quản lý đơn hàng">
+          <MdListAlt size={28} style={{ marginRight: "1.6em" }} />
+          Quản lý đơn hàng
+        </Link>
+        <Link to="/admin/sta" state="> Thống kê">
           <MdOutlineIncompleteCircle
             size={28}
             style={{ marginRight: "1.6em" }}
           />
-          Quản lý đơn hàng
-        </Link>
-        <Link to="/admin/sta">
-          <MdListAlt size={28} style={{ marginRight: "1.6em" }} />
           Thống kê
         </Link>
-        <Link to="/admin/tracking">
+        <Link to="/admin/tracking" state="> Tracking">
           <MdNotListedLocation size={28} style={{ marginRight: "1.6em" }} />
           Tracking
         </Link>

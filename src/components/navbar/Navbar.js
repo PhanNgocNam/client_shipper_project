@@ -1,5 +1,5 @@
 import React from "react";
-import Main_nav from "../main_nav/Main_nav";
+import Mainnav from "../main_nav/Mainnav";
 import Logo from "../../assets/img/logo.jpg";
 import styles from "./navbar.module.scss";
 
@@ -9,7 +9,7 @@ function Navbar() {
       <div className={styles.logo_container}>
         <img src={Logo} alt="Logo" />
       </div>
-      <Main_nav />
+      <Mainnav />
     </div>
   );
 }

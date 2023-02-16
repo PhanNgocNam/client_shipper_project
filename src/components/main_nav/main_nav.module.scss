@@ -1,6 +1,28 @@
 .main_nav_container {
     flex-basis: 76%;
     flex: 1;
-    // background: #E06900;
-    height: 36px;
+    display: flex;
+    align-items: center;
+    height: 50px;
+
+    h2 {
+        flex: 1;
+        padding: 0 26px;
+        font-size: 1.4em;
+        font-weight: 1000;
+        letter-spacing: 1px;
+        color: var(--primary-color);
+    }
+
+    .search_container {
+        flex: 1;
+        height: 50px;
+    }
+    
+    .user_container {
+        flex: 1;
+        height: 50px;
+    }
 }
+
+
