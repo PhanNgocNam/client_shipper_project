@@ -22,7 +22,6 @@ const Popup = () => {
       avatar && URL.revokeObjectURL(avatar);
       cccd && URL.revokeObjectURL(cccd);
       blx && URL.revokeObjectURL(blx);
-      console.log("Cleanup!");
     };
   }, [avatar, blx, cccd]);
 

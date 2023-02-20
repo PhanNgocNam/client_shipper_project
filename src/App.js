@@ -6,12 +6,14 @@ import Login from "./pages/login/Login";
 import PageNotFound from "./pages/page_not_found/PageNotFound";
 import Statistics from "./components/statistics/Statistics";
 import Tracking from "./components/tracking/Tracking";
+import ResetPassword from "./pages/reset_password/ResetPassword";
 function App() {
   return (
     <div className="App">
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/*" element={<PageNotFound />} />
+        <Route path="/resetPW" element={<ResetPassword />} />
         <Route path="/admin" element={<OverviewLayout />}>
           <Route path="shipper" element={<Shipper />} />
           <Route path="order" element={<Order />} />
