@@ -5,6 +5,7 @@
     background: var(--primary-color);
     display: flex;
     flex-direction: column;
+    overflow: auto;
 
     a {
         display: flex;
@@ -18,6 +19,12 @@
         color: white;
         padding: 1em 1em;
         letter-spacing: .14em;
+        p {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            word-wrap: break-word;
+        }
     }
 
     a:hover {

@@ -22,6 +22,43 @@
     .user_container {
         flex: 1;
         height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: right;
+        padding: 0 26px;
+
+        img {
+            height: 40px;
+            width: 40px;
+            object-fit: cover;
+            margin-left: 6px;
+        }
+
+        div {
+            display: flex;
+            justify-content: center;
+            align-items: end;
+            flex-direction: column;
+            h3 {
+                color: #E06900;
+                font-size: 1.4rem;
+                font-weight: 600;
+                padding: 0 10px;
+            }
+
+            button {
+                border: none;
+                background: none;
+                text-decoration: underline;
+                cursor: pointer;
+                padding: 0 10px;
+                font-size: 1.2rem;
+            }
+
+            button:hover {
+                color: #E06900;
+            }
+        }
     }
 }
 
