@@ -40,9 +40,9 @@ function Sidebar() {
           <MdSettings size={26} style={{ marginRight: "1.6em" }} />
           Cài đặt
         </Link>
-        <Link>
+        <Link to="/admin/resetPW" state="> Đổi mật khẩu">
           <MdOutlineHelp size={26} style={{ marginRight: "1.6em" }} />
-          Trợ giúp
+          Đổi mật khẩu
         </Link>
         <div className={styles.needhelp_container}>
           <h2>Bạn cần giúp đỡ?</h2>

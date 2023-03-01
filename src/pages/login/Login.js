@@ -1,29 +1,46 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./login.module.scss";
-import ResetPassword from "../reset_password/ResetPassword";
+import Axios from "axios";
+import { baseURL } from "../../utils/APIRoute";
 import { useDispatch, useSelector } from "react-redux";
 import { loggin } from "../../features/admin/authSlice";
+
+const axios = Axios.create({
+  baseURL: baseURL,
+});
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [err, setErr] = useState("");
 
-  const isLogged = useSelector((state) => state.admin.accessToken);
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Perform login validation here with username and password
-    if (username === "admin" && password === "admin") {
+  const handleAuth = async () => {
+    const { data } = await axios.post("/auth/admin/login", {
+      username,
+      password,
+    });
+    console.log(data);
+    if (!data.status) {
+      setErr(data.message);
+    } else {
       dispatch(
         loggin({
           accessToken: "accessToken",
           refreshToken: "refreshToken",
         })
       );
-      return navigate("/admin");
-      // return navigate("/resetPW");
+      if (data.admin.isFirstLogin) {
+        navigate("admin/resetPW");
+      } else {
+        navigate("/admin");
+      }
     }
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleAuth();
   };
 
   return (
@@ -43,6 +60,7 @@ function Login() {
           onChange={(event) => setPassword(event.target.value)}
         />
 
+        <h3>{err}</h3>
         <button type="submit">Đăng nhập</button>
       </form>
     </div>

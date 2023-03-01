@@ -26,11 +26,15 @@ function ListShipper() {
         <img className={styles.loadingImg} src={loading} />
       ) : (
         shipperData.map((shipper) => (
-          <div key={shipper.id}>
+          <div className={styles.innerDiv} key={shipper.id}>
             <img src={shipper.avatar} alt="Avatar" />
             <h2>Tên: {shipper.fullname}</h2>
             <h3>Biển số: {shipper.license}</h3>
             <h3>Số điện thoại: {shipper.phoneNumber}</h3>
+            <div className={styles.innerDivFooter}>
+              <button className="btn_perform">Cập nhật</button>
+              <button className="btn_delete">Xóa</button>
+            </div>
           </div>
         ))
       )}

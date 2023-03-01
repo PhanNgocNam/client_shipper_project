@@ -13,12 +13,13 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/*" element={<PageNotFound />} />
-        <Route path="/resetPW" element={<ResetPassword />} />
+
         <Route path="/admin" element={<OverviewLayout />}>
           <Route path="shipper" element={<Shipper />} />
           <Route path="order" element={<Order />} />
           <Route path="sta" element={<Statistics />} />
           <Route path="tracking" element={<Tracking />} />
+          <Route path="resetPW" element={<ResetPassword />} />
         </Route>
       </Routes>
     </div>

@@ -27,6 +27,7 @@ img {
 
 :root {
   --primary-color: #743f7e;
+  --secondary-color: #E06900;
 }
 
 .content_right_container {
@@ -62,4 +63,24 @@ img {
   transition: opacity 300ms, transform 300ms;
 }
 /* end global popup animation */
+
+/* Start global button */
+.btn_delete {
+  border: none;
+  background: rgba(0,0,0, .3);
+  padding: .4em .8em;
+  cursor: pointer;
+  border-radius: 3px;
+  margin: 0 3px;
+}
+
+.btn_perform {
+  border: none;
+  box-shadow: 0px 0px 5px rgba(0,0,0, .25);
+  padding: .4em .8em;
+  background: var(--secondary-color);
+  border-radius: 3px;
+  margin: 0 3px;
+}
+/* End global button */
 
