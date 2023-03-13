@@ -32,7 +32,8 @@ img {
 
 .content_right_container {
   float: right;
-  width: 76%;
+  width: 81%;
+  max-width: 81%;
   text-align: center;
   height: calc(100vh - 50px);
   position: relative;
@@ -83,4 +84,15 @@ img {
   margin: 0 3px;
 }
 /* End global button */
+
+/* Begin loading global */
+.loadingImg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: auto;
+  height: auto;
+}
+/* End loading global */
 

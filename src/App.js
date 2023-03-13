@@ -7,6 +7,7 @@ import PageNotFound from "./pages/page_not_found/PageNotFound";
 import Statistics from "./components/statistics/Statistics";
 import Tracking from "./components/tracking/Tracking";
 import ResetPassword from "./pages/reset_password/ResetPassword";
+import OrderMap from "./components/map/OrderMap";
 function App() {
   return (
     <div className="App">
@@ -16,7 +17,9 @@ function App() {
 
         <Route path="/admin" element={<OverviewLayout />}>
           <Route path="shipper" element={<Shipper />} />
-          <Route path="order" element={<Order />} />
+          <Route path="order" element={<Order />}>
+            <Route path="add" element={<OrderMap />} />
+          </Route>
           <Route path="sta" element={<Statistics />} />
           <Route path="tracking" element={<Tracking />} />
           <Route path="resetPW" element={<ResetPassword />} />

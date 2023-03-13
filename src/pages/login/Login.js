@@ -32,7 +32,7 @@ function Login() {
         })
       );
       if (data.admin.isFirstLogin) {
-        navigate("admin/resetPW");
+        navigate("/admin/resetPW");
       } else {
         navigate("/admin");
       }

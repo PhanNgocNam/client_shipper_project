@@ -1,0 +1,92 @@
+.orderMapContainer {
+    width: 100%;
+    height: calc(100vh - 50px);
+    padding: 2px; 
+    overflow: hidden;
+    position: relative;
+
+    .orderBox {
+        background: rgba(0,0,0,.25);
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        height: 160px;
+        border-radius: 3px;
+        width: 32em;
+        z-index: 1;
+        padding: 1em;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        input {
+            outline: none;
+            border-radius: 3px;
+            padding: .3em .6em;
+            border: none;
+            width: 100%;
+        };
+
+        .nameAndStorage {
+            display: flex;
+            justify-content: space-between;
+            input {
+                flex: 1;
+            }
+
+            select {
+                // flex: 1;
+                width: 100px;
+                cursor: pointer;
+                background: white;
+                border-radius: 3px;
+                margin-left: .1em;
+                // border: none;    
+                // outline: none;
+            }
+        }
+
+        .btn_add_order {
+            color: white;
+        }
+
+        .btn_add_order:hover{
+            text-decoration: underline;
+            cursor: pointer;
+            font-style: italic;
+        }
+
+        .btn_delete {
+            cursor: pointer;        
+            padding: 0.4em .8em;
+            color: white;
+            border-radius: 3px;
+            border: none;
+            background: rgba(255, 255, 255, 0.514);
+        }
+
+        .btn_delete:hover {
+            font-style: italic;
+            text-decoration: underline;
+        }
+
+        .footerBox {
+            display: flex;
+            justify-content: flex-end;
+            button {
+                margin-left : 10px;
+            }
+        }
+    }
+
+    .viewOrder {
+        position: absolute;
+        bottom: 1.5em;
+        right: 1em;
+        padding: 0.5em;
+        outline: none;
+        cursor: pointer;
+    }
+
+    
+}
