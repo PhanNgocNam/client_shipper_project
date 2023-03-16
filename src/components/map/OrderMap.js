@@ -1,96 +1,125 @@
-/*global google*/
-import { MAPBOX_API_KEY } from "../../utils/APIRoute";
-import scriptLoader from "react-async-script-loader";
-import PlacesAutocomplete from "react-places-autocomplete";
 import styles from "./ordermap.module.scss";
-import React, { useEffect, useRef, useMemo, useState } from "react";
-import {
-  useJsApiLoader,
-  GoogleMap,
-  Marker,
-  DirectionsRenderer,
-  Autocomplete,
-} from "@react-google-maps/api";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import mapboxgl, { clearStorage } from "mapbox-gl";
+import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
+import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
+import "mapbox-gl/dist/mapbox-gl.css";
+import Axios from "axios";
+import { MAPBOX_API_KEY } from "../../utils/APIRoute";
 
-function OrderMap({ isScriptLoaded, isScriptLoadSucceed }) {
-  const [address, setAddress] = useState("");
-  const center = useMemo(
-    () => ({
-      lng: 106.687569,
-      lat: 10.822024,
-    }),
-    []
-  );
+const axios = Axios.create({
+  baseURL: "http://localhost:4940",
+});
 
-  const handleChange = (value) => {
-    setAddress(value);
+function OrderMap() {
+  const center = useMemo(() => [106.687569, 10.822024], []);
+  const [address, setAdress] = useState("Địa chỉ nhận hàng...");
+  const orderName = useRef();
+  const lngRef = useRef();
+  const latRef = useRef();
+  const phoneRef = useRef();
+  const storageRef = useRef();
+  useEffect(() => {
+    const map = new mapboxgl.Map({
+      container: "map",
+      style: "mapbox://styles/mapbox/streets-v12",
+      center: [106.687569, 10.822024],
+      zoom: 12,
+      accessToken: MAPBOX_API_KEY,
+    });
+    const geocoder = new MapboxGeocoder({
+      accessToken: MAPBOX_API_KEY,
+      mapboxgl: mapboxgl,
+      countries: "VN",
+      placeholder: "Nhập địa chỉ giao hàng...",
+    });
+
+    map.on("click", (e) => {
+      console.log(e.lngLat);
+      lngRef.current = e.lngLat.lng;
+      latRef.current = e.lngLat.lat;
+      handleReverseGeocoding();
+    });
+
+    map.addControl(geocoder);
+
+    geocoder.on("result", (event) => {
+      const { center, place_name } = event.result;
+      setAdress(place_name);
+      console.log(event.result);
+      map.flyTo({
+        center,
+        zoom: 16,
+      });
+    });
+  }, []);
+
+  const handleReverseGeocoding = async () => {
+    const { data } = await axios.get(
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${lngRef.current},${latRef.current}.json?access_token=${MAPBOX_API_KEY}`
+    );
+    setAdress(data.features[0].place_name);
   };
 
-  const handleSelect = (value) => {
-    setAddress(value);
+  const handleAddOneOrder = async () => {
+    const { data } = await axios.post("/order/new", {
+      deliveryAddress: address,
+      phoneReceive: phoneRef.current,
+      storage: storageRef.current,
+      coords: {
+        lng: lngRef.current,
+        lat: latRef.current,
+      },
+      orderName: orderName.current,
+    });
+    console.log(data);
   };
-
-  // const { isLoaded } = useJsApiLoader({
-  //   googleMapsApiKey: "AIzaSyDrtXFuOaX95Llcs7VIv19sSiVYlbjgLMU",
-  //   libraries: ["places"],
-  // });
   return (
     <div id="map" className={styles.orderMapContainer}>
-      {isScriptLoadSucceed ? (
-        <GoogleMap
-          zoom={16}
-          center={center}
-          mapContainerClassName={styles.mapContainer}
-        >
-          <div className={styles.orderBox}>
-            <div className={styles.nameAndStorage}>
-              <input placeholder="Nhập tên sản phẩm..." />
-              <select>
-                <option>--Chọn Kho--</option>
-                <option>Kho Gò Vấp</option>
-                <option>Kho Quận 3</option>
-                <option>Kho Bình Thạnh</option>
-              </select>
-            </div>
-            <PlacesAutocomplete
-              value={address}
-              onChange={handleChange}
-              onSelect={handleSelect}
-            >
-              {({
-                getInputProps,
-                suggestions,
-                getSuggestionItemProps,
-                loading,
-              }) => (
-                <>
-                  <div>
-                    <input
-                      {...getInputProps({
-                        placeholder: "Search Places ...",
-                      })}
-                    />
-                  </div>
-                  <div>
-                    {loading && <div style={{ color: "red" }}>Loading...</div>}
-                  </div>
-                </>
-              )}
-            </PlacesAutocomplete>
+      <div className={styles.orderBox}>
+        <div className={styles.nameAndStorage}>
+          <input
+            onChange={(e) => (orderName.current = e.target.value)}
+            placeholder="Nhập tên sản phẩm..."
+          />
+          <select
+            onChange={(e) => {
+              storageRef.current = e.target.value;
+            }}
+          >
+            <option>--Chọn Kho--</option>
+            <option value="govap">Kho Gò Vấp</option>
+            <option value="quan3">Kho Quận 3</option>
+            <option value="binhthanh">Kho Bình Thạnh</option>
+          </select>
+        </div>
+        <input
+          placeholder="Số điện thoại..."
+          onChange={(e) => (phoneRef.current = e.target.value)}
+        />
 
-            <div className={styles.footerBox}>
-              <button className={styles.btn_add_order}>Thêm đơn hàng</button>
-              <button className={styles.btn_delete}>Hủy</button>
-            </div>
-          </div>
-        </GoogleMap>
-      ) : (
-        ""
-      )}
+        <div className={styles.addressDetail}>
+          <h3
+            style={{
+              textAlign: "left",
+              fontWeight: "600",
+              padding: "0 0.3em",
+              fontStyle: "italic",
+            }}
+          >
+            Giao tới: {address}
+          </h3>
+        </div>
+
+        <div className={styles.footerBox}>
+          <button onClick={handleAddOneOrder} className={styles.btn_add_order}>
+            Thêm đơn hàng
+          </button>
+          <button className={styles.btn_delete}>Hủy</button>
+        </div>
+      </div>
     </div>
   );
 }
 
-export default scriptLoader([
-  "https://maps.googleapis.com/maps/api/js?key=AIzaSyDrtXFuOaX95Llcs7VIv19sSiVYlbjgLMU&libraries=places",
-])(OrderMap);
+export default OrderMap;

@@ -96,3 +96,7 @@ img {
 }
 /* End loading global */
 
+.mapboxgl-ctrl-geocoder.mapboxgl-ctrl input[type="text"] {
+  
+}
+

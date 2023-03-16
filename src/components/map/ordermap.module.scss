@@ -15,7 +15,7 @@
         position: absolute;
         top: 10px;
         left: 10px;
-        height: 110px;
+        height: 180px;
         border-radius: 3px;
         width: 32em;
         z-index: 1;
@@ -47,6 +47,23 @@
                 margin-left: .1em;
                 border: none;    
                 outline: none;
+            }
+        }
+
+        .addressDetail {
+            border: 1px solid white;
+            padding: 0.3em 0;
+            border-radius: 3px;
+            max-height: 50px;
+            overflow-x: hidden;
+            overflow-y: scroll;
+
+            h3 {
+                color: rgba(0,0,0,.8);
+                // text-overflow: ellipsis;
+                // white-space: nowrap;
+                // overflow: hidden;
+                // word-wrap: break-word;
             }
         }
 
