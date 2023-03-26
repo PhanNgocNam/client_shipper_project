@@ -1,6 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import { CSSTransition } from "react-transition-group";
 import { MdAddCircleOutline } from "react-icons/md";
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { auth } from "../../firebase";
+import { fbstorage } from "../../firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { v4 } from "uuid";
 
 import styles from "./popup.module.scss";
 
@@ -8,9 +13,19 @@ const Popup = () => {
   const [isOpen, setIsOpen] = useState(false);
   const popupRef = useRef(null);
 
+  const [otpExpand, setOtpExpand] = useState(false);
+  const [isVerifyPhoneNumber, setIsVerifyPhoneNumber] = useState(false);
+  const [files, setFiles] = useState(null);
+  const [downloadURL, setDownloadURL] = useState({
+    avatarURL: "",
+    blxURL: "",
+    cccdURL: "",
+  });
+
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [otp, setOtp] = useState("");
   const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
+  const [storage, setStorageChange] = useState("");
   const [avatar, setAvatar] = useState("");
   const [cccd, setCccd] = useState("");
   const [blx, setBlx] = useState("");
@@ -32,9 +47,9 @@ const Popup = () => {
     setCccd("");
     setBlx("");
     setFullName("");
-    setEmail("");
     setPhoneNumber("");
     setLisence("");
+    setOtpExpand(false);
   };
 
   const handleFullNameChange = (event) => {
@@ -45,8 +60,8 @@ const Popup = () => {
     setPhoneNumber(event.target.value);
   };
 
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
+  const handleStorageChange = (event) => {
+    // setEmail(event.target.value);
   };
 
   const handleLicenseChange = (e) => {
@@ -65,6 +80,10 @@ const Popup = () => {
     setCccd(e.target.files[0]);
   };
 
+  const handleOtpChange = (e) => {
+    setOtp(e.target.value);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const errors = [];
@@ -72,8 +91,8 @@ const Popup = () => {
       errors.push("Họ tên là bắt buộc.");
     }
 
-    if (!email) {
-      errors.push("Email là bắt buộc.");
+    if (!phoneNumber) {
+      errors.push("Số điện thoại là bắt buộc!");
     }
 
     if (!license) {
@@ -83,6 +102,75 @@ const Popup = () => {
     setFormErrors(errors);
     if (errors.length === 0) {
       // Perform registration logic here
+      console.log("Start handle logic in handleSubmit!");
+      handleVerifyOtp(event);
+    }
+  };
+
+  const generateRecapcha = () => {
+    window.recaptchaVerifier = new RecaptchaVerifier(
+      "recapchar-container",
+      {
+        size: "invisible",
+        callback: (response) => {
+          // reCAPTCHA solved, allow signInWithPhoneNumber.
+          console.log("Generate Recapcha Success!");
+        },
+      },
+      auth
+    );
+  };
+
+  const handleGetOtp = () => {
+    console.log("Your OTP Here!");
+    generateRecapcha();
+    let appVerify = window.recaptchaVerifier;
+    signInWithPhoneNumber(auth, phoneNumber, appVerify)
+      .then((confirmationResult) => {
+        window.confirmationResult = confirmationResult;
+      })
+      .catch((err) => console.log(err.message));
+  };
+
+  const handleUploadImage = async (file) => {
+    if (file === null) return;
+    const imageRef = ref(fbstorage, `images/shipper/${file.name + v4()}`);
+    console.log(imageRef);
+    try {
+      const a = await uploadBytes(imageRef, file);
+      console.log(a.ref._location.path_);
+      getDownloadURL(ref(storage, a.ref._location.path_)).then((res) =>
+        console.log(res)
+      );
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
+  const handleVerifyOtp = () => {
+    if (otp.length === 6) {
+      let confirmationResult = window.confirmationResult;
+      confirmationResult
+        .confirm(otp)
+        .then((result) => {
+          setIsVerifyPhoneNumber();
+          if (result) {
+            console.log("Phone is verified!");
+            setIsVerifyPhoneNumber(true);
+          }
+        })
+        .catch((error) => {
+          // User couldn't sign in (bad verification code?)
+          console.log(error.message);
+        });
+    } else {
+      alert("Mã otp phải có chính xác 6 ký tự.");
+    }
+  };
+
+  const handleOtpExpand = () => {
+    if (phoneNumber !== "") {
+      setOtpExpand(true);
     }
   };
 
@@ -125,13 +213,13 @@ const Popup = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="email">Email:</label>
-                  <input
-                    type="email"
-                    id="email"
-                    value={email}
-                    onChange={handleEmailChange}
-                  />
+                  <label htmlFor="kho">Kho:</label>
+                  <select>
+                    <option>--Lựa chọn kho--</option>
+                    <option>Kho Gò Vấp</option>
+                    <option>Kho Bình Thạnh</option>
+                    <option>Kho Quận 3</option>
+                  </select>
                 </div>
 
                 <div>
@@ -206,14 +294,42 @@ const Popup = () => {
                   </div>
                 </div>
               </form>
+              {otpExpand ? (
+                <div>
+                  <label htmlFor="otp">OTP:</label>
+                  <input
+                    onChange={(e) => handleOtpChange(e)}
+                    id="otp"
+                    placeholder="Nhập OTP..."
+                  />
+                </div>
+              ) : (
+                ""
+              )}
             </div>
             <div className={styles.popup_footer}>
-              <button type="submit" onClick={handleSubmit}>
-                Đăng ký
-              </button>
+              {otpExpand ? (
+                <button type="submit" onClick={handleSubmit}>
+                  Đăng ký
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    if (phoneNumber) {
+                      setOtpExpand(true);
+                      handleGetOtp();
+                    } else {
+                      alert("Vui lòng nhập số điện thoại trước.");
+                    }
+                  }}
+                >
+                  Xác minh
+                </button>
+              )}
               <button className={styles.btn_cancel} onClick={closePopup}>
                 Hủy
               </button>
+              <div id="recapchar-container"></div>
             </div>
           </div>
         </div>

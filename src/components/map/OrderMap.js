@@ -14,11 +14,13 @@ const axios = Axios.create({
 function OrderMap() {
   const center = useMemo(() => [106.687569, 10.822024], []);
   const [address, setAdress] = useState("Địa chỉ nhận hàng...");
-  const orderName = useRef();
-  const lngRef = useRef();
-  const latRef = useRef();
-  const phoneRef = useRef();
-  const storageRef = useRef();
+  const [orderName, setOrderName] = useState("");
+  const [phoneReceive, setPhoneReceive] = useState("");
+  const lngRef = useRef(null);
+  const latRef = useRef(null);
+  const storageRef = useRef(null);
+
+  console.log(orderName);
   useEffect(() => {
     const map = new mapboxgl.Map({
       container: "map",
@@ -64,23 +66,32 @@ function OrderMap() {
   const handleAddOneOrder = async () => {
     const { data } = await axios.post("/order/new", {
       deliveryAddress: address,
-      phoneReceive: phoneRef.current,
+      phoneReceive: phoneReceive,
       storage: storageRef.current,
       coords: {
         lng: lngRef.current,
         lat: latRef.current,
       },
-      orderName: orderName.current,
+      orderName: orderName,
     });
-    console.log(data);
+    alert("Thêm đơn hàng thành công!");
+    handleCancelAddOrder();
   };
+
+  const handleCancelAddOrder = () => {
+    setOrderName("");
+    setPhoneReceive("");
+    setAdress("Địa chỉ nhận hàng...");
+  };
+
   return (
     <div id="map" className={styles.orderMapContainer}>
       <div className={styles.orderBox}>
         <div className={styles.nameAndStorage}>
           <input
-            onChange={(e) => (orderName.current = e.target.value)}
+            onChange={(e) => setOrderName(e.target.value)}
             placeholder="Nhập tên sản phẩm..."
+            value={orderName}
           />
           <select
             onChange={(e) => {
@@ -95,7 +106,8 @@ function OrderMap() {
         </div>
         <input
           placeholder="Số điện thoại..."
-          onChange={(e) => (phoneRef.current = e.target.value)}
+          onChange={(e) => setPhoneReceive(e.target.value)}
+          value={phoneReceive}
         />
 
         <div className={styles.addressDetail}>
@@ -115,7 +127,9 @@ function OrderMap() {
           <button onClick={handleAddOneOrder} className={styles.btn_add_order}>
             Thêm đơn hàng
           </button>
-          <button className={styles.btn_delete}>Hủy</button>
+          <button onClick={handleCancelAddOrder} className={styles.btn_delete}>
+            Hủy
+          </button>
         </div>
       </div>
     </div>
