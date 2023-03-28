@@ -1,3 +1,4 @@
+import styles from "./popup.module.scss";
 import React, { useState, useRef, useEffect } from "react";
 import { CSSTransition } from "react-transition-group";
 import { MdAddCircleOutline } from "react-icons/md";
@@ -6,29 +7,30 @@ import { auth } from "../../firebase";
 import { fbstorage } from "../../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
+import loader from "../../assets/img/loader.gif";
+import Axios from "axios";
 
-import styles from "./popup.module.scss";
+const axios = Axios.create({
+  baseURL: "http://localhost:4940",
+});
 
 const Popup = () => {
   const [isOpen, setIsOpen] = useState(false);
   const popupRef = useRef(null);
 
   const [otpExpand, setOtpExpand] = useState(false);
-  const [isVerifyPhoneNumber, setIsVerifyPhoneNumber] = useState(false);
-  const [files, setFiles] = useState(null);
-  const [downloadURL, setDownloadURL] = useState({
-    avatarURL: "",
-    blxURL: "",
-    cccdURL: "",
-  });
+  const fullNameRef = useRef(null);
 
   const [phoneNumber, setPhoneNumber] = useState("");
   const [otp, setOtp] = useState("");
   const [fullName, setFullName] = useState("");
-  const [storage, setStorageChange] = useState("");
+  const [storage, setStorage] = useState("");
   const [avatar, setAvatar] = useState("");
+  const [avatarURL, setAvatarURL] = useState(null);
   const [cccd, setCccd] = useState("");
+  const [cccdURL, setCccdURL] = useState(null);
   const [blx, setBlx] = useState("");
+  const [blxURL, setBlxURL] = useState(null);
   const [license, setLisence] = useState("");
   const [formErrors, setFormErrors] = useState([]);
 
@@ -60,8 +62,8 @@ const Popup = () => {
     setPhoneNumber(event.target.value);
   };
 
-  const handleStorageChange = (event) => {
-    // setEmail(event.target.value);
+  const handleStorageChange = (e) => {
+    setStorage(e.target.value);
   };
 
   const handleLicenseChange = (e) => {
@@ -84,6 +86,43 @@ const Popup = () => {
     setOtp(e.target.value);
   };
 
+  /** Begin handle upload image to Firebase Storage **/
+  const handleUploadAvatar = async () => {
+    if (avatar === null) return;
+    const avatarRef = ref(
+      fbstorage,
+      `images/shipper/${phoneNumber}/${avatar.name + v4()}`
+    );
+    const data = await uploadBytes(avatarRef, avatar);
+    const avatarURL = await getDownloadURL(
+      ref(fbstorage, data.metadata.fullPath)
+    );
+    setAvatarURL(avatarURL);
+  };
+  const handleUploadCccd = async () => {
+    if (cccd === null) return;
+    const cccdRef = ref(
+      fbstorage,
+      `images/shipper/${phoneNumber}/${cccd.name + v4()}`
+    );
+    const data = await uploadBytes(cccdRef, cccd);
+    const cccdURL = await getDownloadURL(
+      ref(fbstorage, data.metadata.fullPath)
+    );
+    setCccdURL(cccdURL);
+  };
+  const handleUploadBlx = async () => {
+    if (blx === null) return;
+    const blxRef = ref(
+      fbstorage,
+      `images/shipper/${phoneNumber}/${blx.name + v4()}`
+    );
+    const data = await uploadBytes(blxRef, blx);
+    const blxURL = await getDownloadURL(ref(fbstorage, data.metadata.fullPath));
+    setBlxURL(blxURL);
+  };
+  /** End handle upload image to Firebase Storage **/
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const errors = [];
@@ -103,9 +142,11 @@ const Popup = () => {
     if (errors.length === 0) {
       // Perform registration logic here
       console.log("Start handle logic in handleSubmit!");
-      handleVerifyOtp(event);
+      handleAddOneShipper();
     }
   };
+
+  // console.log(storage);
 
   const generateRecapcha = () => {
     window.recaptchaVerifier = new RecaptchaVerifier(
@@ -132,16 +173,31 @@ const Popup = () => {
       .catch((err) => console.log(err.message));
   };
 
-  const handleUploadImage = async (file) => {
-    if (file === null) return;
-    const imageRef = ref(fbstorage, `images/shipper/${file.name + v4()}`);
-    console.log(imageRef);
+  const handleDeleteAllField = () => {
+    setOtpExpand(false);
+    setFullName("");
+    setLisence("");
+    setAvatar(null);
+    setBlx(null);
+    setCccd(null);
+    setStorage("");
+    fullNameRef.current.focus();
+  };
+  const handleAddOneShipper = async () => {
     try {
-      const a = await uploadBytes(imageRef, file);
-      console.log(a.ref._location.path_);
-      getDownloadURL(ref(storage, a.ref._location.path_)).then((res) =>
-        console.log(res)
-      );
+      const { data } = await axios.post("/shipper/new", {
+        fullName,
+        storage,
+        license,
+        phoneNumber,
+        avatarURL,
+        cccdURL,
+        blxURL,
+      });
+      console.log(data);
+      if (data) {
+        handleDeleteAllField();
+      }
     } catch (err) {
       console.log(err.message);
     }
@@ -153,10 +209,11 @@ const Popup = () => {
       confirmationResult
         .confirm(otp)
         .then((result) => {
-          setIsVerifyPhoneNumber();
           if (result) {
             console.log("Phone is verified!");
-            setIsVerifyPhoneNumber(true);
+            handleUploadAvatar();
+            handleUploadCccd();
+            handleUploadBlx();
           }
         })
         .catch((error) => {
@@ -165,12 +222,6 @@ const Popup = () => {
         });
     } else {
       alert("Mã otp phải có chính xác 6 ký tự.");
-    }
-  };
-
-  const handleOtpExpand = () => {
-    if (phoneNumber !== "") {
-      setOtpExpand(true);
     }
   };
 
@@ -209,16 +260,17 @@ const Popup = () => {
                     id="fullName"
                     value={fullName}
                     onChange={handleFullNameChange}
+                    ref={fullNameRef}
                   />
                 </div>
 
                 <div>
                   <label htmlFor="kho">Kho:</label>
-                  <select>
+                  <select onChange={handleStorageChange}>
                     <option>--Lựa chọn kho--</option>
-                    <option>Kho Gò Vấp</option>
-                    <option>Kho Bình Thạnh</option>
-                    <option>Kho Quận 3</option>
+                    <option value="govap">Kho Gò Vấp</option>
+                    <option value="binhthanh">Kho Bình Thạnh</option>
+                    <option value="quan3">Kho Quận 3</option>
                   </select>
                 </div>
 
@@ -301,6 +353,8 @@ const Popup = () => {
                     onChange={(e) => handleOtpChange(e)}
                     id="otp"
                     placeholder="Nhập OTP..."
+                    value={otp}
+                    onBlur={(e) => handleVerifyOtp(e)}
                   />
                 </div>
               ) : (
@@ -309,9 +363,20 @@ const Popup = () => {
             </div>
             <div className={styles.popup_footer}>
               {otpExpand ? (
-                <button type="submit" onClick={handleSubmit}>
-                  Đăng ký
-                </button>
+                avatarURL && blxURL && cccdURL ? (
+                  <button
+                    type="submit"
+                    onClick={(e) => {
+                      handleSubmit(e);
+                    }}
+                  >
+                    Đăng ký
+                  </button>
+                ) : (
+                  <button>
+                    <img src={loader} width="10px" height="10px" />
+                  </button>
+                )
               ) : (
                 <button
                   onClick={() => {
