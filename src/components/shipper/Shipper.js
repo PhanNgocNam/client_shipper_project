@@ -1,10 +1,12 @@
 import Popup from "../popup/Popup";
 import ListShipper from "../list_shipper/ListShipper";
+import { useState } from "react";
 
 function Shipper() {
+  const [rerenderListShipper, setRerenderListShipper] = useState(false);
   return (
     <div className="content_right_container">
-      <Popup />
+      <Popup rerender={setRerenderListShipper} />
       <ListShipper />
     </div>
   );

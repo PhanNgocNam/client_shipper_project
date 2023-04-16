@@ -14,7 +14,7 @@ const axios = Axios.create({
   baseURL: "http://localhost:4940",
 });
 
-const Popup = () => {
+const Popup = ({ rerender }) => {
   const [isOpen, setIsOpen] = useState(false);
   const popupRef = useRef(null);
 
@@ -52,6 +52,7 @@ const Popup = () => {
     setPhoneNumber("");
     setLisence("");
     setOtpExpand(false);
+    rerender(true);
   };
 
   const handleFullNameChange = (event) => {
@@ -177,6 +178,7 @@ const Popup = () => {
     setOtpExpand(false);
     setFullName("");
     setLisence("");
+    setPhoneNumber("");
     setAvatar(null);
     setBlx(null);
     setCccd(null);
@@ -194,8 +196,9 @@ const Popup = () => {
         cccdURL,
         blxURL,
       });
-      console.log(data);
+      // console.log(data);
       if (data) {
+        alert("Thành công, shipper đã được thêm.");
         handleDeleteAllField();
       }
     } catch (err) {

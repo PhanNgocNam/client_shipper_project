@@ -1,6 +1,6 @@
 import styles from "./ordermap.module.scss";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import mapboxgl, { clearStorage } from "mapbox-gl";
+import mapboxgl from "mapbox-gl";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import "mapbox-gl/dist/mapbox-gl.css";

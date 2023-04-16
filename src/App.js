@@ -8,7 +8,14 @@ import Statistics from "./components/statistics/Statistics";
 import Tracking from "./components/tracking/Tracking";
 import ResetPassword from "./pages/reset_password/ResetPassword";
 import OrderMap from "./components/map/OrderMap";
+
+import { socket } from "./socket";
+import { useEffect } from "react";
+
 function App() {
+  useEffect(() => {
+    socket.on("connect", () => console.log("Connect to socket server!"));
+  }, []);
   return (
     <div className="App">
       <Routes>

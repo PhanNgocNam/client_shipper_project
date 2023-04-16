@@ -26,7 +26,7 @@ function Order() {
     }
   };
   const handleGetOrderData = async () => {
-    const { data: orderData } = await axios.get("/order");
+    const { data: orderData } = await axios.get("/order/getAllOrder");
     setOrderList(orderData);
   };
 
@@ -47,12 +47,13 @@ function Order() {
             <img className="loadingImg" src={loading} alt="Loading..." />
           ) : newOrderList.length === 0 ? (
             orderList.map((order) => (
-              <div key={order.id} className={styles.innerDiv}>
+              <div key={order._id} className={styles.innerDiv}>
                 {/* <button className={styles.addOrder}>Thêm đơn hàng</button> */}
-                <h2>Kho: {order.warehouses}</h2>
+                <h2>Kho: {order.storage}</h2>
+                <h3>Tên sản phẩm: {order.orderName}</h3>
                 <h3>Số điện thoại: {order.phoneReceive}</h3>
-                <h3>Thu khách: {order.totalPrice}</h3>
-                <h3>Khối lượng: {order.mass}</h3>
+                {/* <h3>Thu khách: {order.totalPrice}</h3> */}
+                {/* <h3>Khối lượng: {order.mass}</h3> */}
                 <h3>Giao tới: {order.deliveryAddress}</h3>
                 <div className={styles.innerDivFooter}>
                   <button className="btn_perform">Cập nhật</button>
