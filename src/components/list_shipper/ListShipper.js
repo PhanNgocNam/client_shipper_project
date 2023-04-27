@@ -153,7 +153,10 @@ function ListShipper() {
             >
               <img
                 onClick={() => {
-                  if (sessionStorage.getItem("shipperLocation" !== null)) {
+                  if (
+                    JSON.parse(sessionStorage.getItem("shipperLocation"))
+                      .length > 0
+                  ) {
                     setIsOpen(true);
                   } else {
                     alert("Hiện chưa có shipper nào đang online!");

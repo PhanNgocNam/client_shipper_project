@@ -11,6 +11,7 @@ import OrderMap from "./components/map/OrderMap";
 
 import { socket } from "./socket";
 import { useEffect } from "react";
+import Welcome from "./components/welcome/Welcome";
 
 function App() {
   useEffect(() => {
@@ -24,6 +25,7 @@ function App() {
         <Route path="/" element={<OverviewLayout />} />
 
         <Route path="/admin" element={<OverviewLayout />}>
+          <Route path="welcome" element={<Welcome />} />
           <Route path="shipper" element={<Shipper />} />
           <Route path="order" element={<Order />}>
             <Route path="add" element={<OrderMap />} />
