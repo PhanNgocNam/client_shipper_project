@@ -1,0 +1,15 @@
+.popup_body {
+    display: flex;
+    flex-direction: column;
+
+    input {
+        margin: 1.5em 0;
+        padding: .2em .5em;
+    }
+
+    select {
+        padding: .2em .5em;
+        outline: none;
+    }
+}
+

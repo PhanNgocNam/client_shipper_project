@@ -21,6 +21,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/*" element={<PageNotFound />} />
+        <Route path="/" element={<OverviewLayout />} />
 
         <Route path="/admin" element={<OverviewLayout />}>
           <Route path="shipper" element={<Shipper />} />

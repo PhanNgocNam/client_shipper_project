@@ -1,0 +1,13 @@
+.acceptBtn {
+    padding: 0.8em 1em;
+    background: #743f7e;
+    color: white;
+    border-radius: 3px;
+    border: none;
+    min-width: 100px;
+}
+
+.acceptBtn:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}

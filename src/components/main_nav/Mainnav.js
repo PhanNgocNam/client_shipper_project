@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../features/admin/authSlice";
 import styles from "./main_nav.module.scss";
 import adminAvatar from "../../assets/img/admin.png";
+import AcceptButton from "../button/AcceptButton";
+import RejectButton from "../button/RejectButton";
 
 function Mainnav() {
   const lable = useLocation();
@@ -18,7 +20,11 @@ function Mainnav() {
   return (
     <div className={styles.main_nav_container}>
       <h2>{lable.state}</h2>
-      <div className={styles.search_container}>a block</div>
+      <div className={styles.search_container}>
+        {/* <AcceptBtn width="16px" content="Dadjk" /> */}
+        <AcceptButton content="HI" />
+        <RejectButton content="Reject" />
+      </div>
       <div className={styles.user_container}>
         <div>
           <h3>Admin</h3>

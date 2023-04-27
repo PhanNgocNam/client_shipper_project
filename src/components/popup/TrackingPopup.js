@@ -9,21 +9,12 @@ import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { MAPBOX_API_KEY } from "../../utils/APIRoute";
 
-function TrackingPopup({ isOpen, setIsOpen, shipper, shipperLocation }) {
+function TrackingPopup({ isOpen, setIsOpen, shipper }) {
   const popupRef = useRef(null);
-  const [location, setLocation] = useState([]);
 
   useEffect(() => {
+    let shipperLocation = JSON.parse(sessionStorage.getItem("shipperLocation"));
     if (isOpen) {
-      if (shipperLocation.length !== 0) {
-        const x = shipperLocation.find(
-          (shipperIt) => shipperIt.shipperID === shipper._id
-        );
-        if (x) {
-          setLocation([x.longitude, x.latitude]);
-        }
-      }
-
       const map = new mapboxgl.Map({
         container: "map",
         style: "mapbox://styles/mapbox/streets-v12",
@@ -32,22 +23,34 @@ function TrackingPopup({ isOpen, setIsOpen, shipper, shipperLocation }) {
         accessToken: MAPBOX_API_KEY,
       });
 
-      if (location.length !== 0) {
-        new mapboxgl.Marker().setLngLat(location).addTo(map);
+      if (shipperLocation.length !== 0) {
+        console.log(shipperLocation);
+
+        const x = shipperLocation.find(
+          (shipperIt) => shipperIt.shipperID === shipper._id
+        );
+
+        if (x) {
+          new mapboxgl.Marker()
+            .setLngLat({ lon: x.longitude, lat: x.latitude })
+            .addTo(map);
+
+          map.flyTo({
+            center: { lon: x.longitude, lat: x.latitude },
+          });
+        } else {
+          console.log("Chưa online!");
+        }
       }
     }
-  }, [isOpen]);
 
-  // const handleOpenPopup = () => {
-  //   setIsOpen(true);
-  // };
+    return () => {};
+  }, [isOpen]);
 
   const handleClosePopup = () => {
     setIsOpen(false);
   };
-  // console.log(shipperLocation);
-  // console.log(shipper);
-  console.log(location);
+
   return (
     <>
       <CSSTransition

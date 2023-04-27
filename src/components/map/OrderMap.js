@@ -4,8 +4,8 @@ import mapboxgl from "mapbox-gl";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import "mapbox-gl/dist/mapbox-gl.css";
-import Axios from "axios";
 import { MAPBOX_API_KEY } from "../../utils/APIRoute";
+import Axios from "axios";
 
 const axios = Axios.create({
   baseURL: "http://localhost:4940",
@@ -16,11 +16,12 @@ function OrderMap() {
   const [address, setAdress] = useState("Địa chỉ nhận hàng...");
   const [orderName, setOrderName] = useState("");
   const [phoneReceive, setPhoneReceive] = useState("");
+  const [weight, setWeight] = useState("");
   const lngRef = useRef(null);
   const latRef = useRef(null);
   const storageRef = useRef(null);
 
-  console.log(orderName);
+  // console.log(orderName);
   useEffect(() => {
     const map = new mapboxgl.Map({
       container: "map",
@@ -73,9 +74,14 @@ function OrderMap() {
         lat: latRef.current,
       },
       orderName: orderName,
+      weight: Number(weight),
     });
-    alert("Thêm đơn hàng thành công!");
-    handleCancelAddOrder();
+    if (data.status === "success") {
+      alert("Thêm đơn hàng thành công!");
+      handleCancelAddOrder();
+    } else {
+      alert(data.message);
+    }
   };
 
   const handleCancelAddOrder = () => {
@@ -93,6 +99,7 @@ function OrderMap() {
             placeholder="Nhập tên sản phẩm..."
             value={orderName}
           />
+
           <select
             onChange={(e) => {
               storageRef.current = e.target.value;
@@ -108,6 +115,13 @@ function OrderMap() {
           placeholder="Số điện thoại..."
           onChange={(e) => setPhoneReceive(e.target.value)}
           value={phoneReceive}
+        />
+
+        <input
+          type="number"
+          onChange={(e) => setWeight(e.target.value)}
+          placeholder="Nhập khối lượng sản phẩm..."
+          value={weight}
         />
 
         <div className={styles.addressDetail}>
