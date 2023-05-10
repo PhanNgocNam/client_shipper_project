@@ -59,11 +59,8 @@ function Order() {
 
   const handleOptionChange = (e) => {
     const select = e.target.value;
-    // console.log(select);
     if (select) {
-      setNewOrderList(
-        orderList.filter((order) => order.warehousesValue === select)
-      );
+      setNewOrderList(orderList.filter((order) => order.storage === select));
     } else {
       setNewOrderList([]);
     }
@@ -113,7 +110,7 @@ function Order() {
 
   useEffect(() => {
     handleGetOrderData();
-  }, []);
+  }, [isAddOrder]);
 
   return (
     <div className="content_right_container">
@@ -178,13 +175,10 @@ function Order() {
                   key={order._id}
                   className={styles.innerDiv}
                 >
-                  {/* <button className={styles.addOrder}>Thêm đơn hàng</button> */}
                   <h2>Kho: {order.storage}</h2>
                   <h3>Khối lượng: {order.weight} kg</h3>
                   <h3>Tên sản phẩm: {order.orderName}</h3>
                   <h3>Số điện thoại: {order.phoneReceive}</h3>
-                  {/* <h3>Thu khách: {order.totalPrice}</h3> */}
-                  {/* <h3>Khối lượng: {order.mass}</h3> */}
                   <h3>Giao tới: {order.deliveryAddress}</h3>
                   <div className={styles.innerDivFooter}>
                     <button
@@ -205,11 +199,10 @@ function Order() {
             ) : (
               newOrderList.map((order) => (
                 <div key={order.id} className={styles.innerDiv}>
-                  {/* <button className={styles.addOrder}>Thêm đơn hàng</button> */}
-                  <h2>Kho: {order.warehouses}</h2>
+                  <h2>Kho: {order.storage}</h2>
                   <h3>Số điện thoại: {order.phoneReceive}</h3>
-                  <h3>Thu khách: {order.totalPrice}</h3>
-                  <h3>Khối lượng: {order.mass}</h3>
+
+                  <h3>Khối lượng: {order.weight} kg</h3>
                   <h3>Giao tới: {order.deliveryAddress}</h3>
                   <div className={styles.innerDivFooter}>
                     <button className="btn_perform">Cập nhật</button>

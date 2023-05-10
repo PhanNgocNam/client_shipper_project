@@ -10,11 +10,7 @@ import ConfirmPopup from "../popup/ConfirmPopup";
 import UpdatePopup from "../popup/UpdatePopup";
 import { axios } from "../../axiosConfig";
 
-// const axios = Axios.create({
-//   baseURL: baseURL,
-// });
-
-function ListShipper() {
+function ListShipper({ trigerRerender }) {
   const [shipperData, setShipperData] = useState([]);
   const [newShipperList, setNewShipperList] = useState([]);
   const [singleShiper, setSingleShipper] = useState({});
@@ -34,8 +30,6 @@ function ListShipper() {
     return () => {};
   }, [socket]);
 
-  // console.log(singleShiper);
-  // console.log(fullNameUpdate);
   const handleGetAllShipper = async () => {
     if (shipperData.length === 0) {
       const { data } = await axios.get("/shipper/all");
@@ -57,7 +51,7 @@ function ListShipper() {
     handleGetAllShipper();
 
     return () => {};
-  }, [isOpen, isDelete, shipperData]);
+  }, [isOpen, isDelete, shipperData, trigerRerender]);
 
   const handleGetValueOfUpdateFullnameInput = (e) => {
     setFullNameUpdate(e.target.value);
@@ -86,7 +80,7 @@ function ListShipper() {
       phoneNumber,
       password,
     });
-    // console.log(data);
+
     if (data.status === "success") {
       setIsUpdate(false);
       handleMakeAllFieldBecomeNull();
@@ -99,8 +93,6 @@ function ListShipper() {
     }
   };
 
-  // console.log(storageUpdate);
-  // console.log(shipperData);
   return (
     <div className={styles.shipper_container}>
       {shipperData.length === 0 ? (
@@ -153,7 +145,9 @@ function ListShipper() {
             >
               <img
                 onClick={() => {
-                  if (
+                  if (sessionStorage.getItem("shipperLocation") === null) {
+                    alert("Hiện chưa có shipper nào đang online!");
+                  } else if (
                     JSON.parse(sessionStorage.getItem("shipperLocation"))
                       .length > 0
                   ) {

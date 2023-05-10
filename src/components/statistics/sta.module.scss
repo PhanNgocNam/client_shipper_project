@@ -1,0 +1,28 @@
+.sta_container {
+    height: calc(100% - 75px);
+    margin: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 2px 8px 0px rgba(0,0,0,0.37);
+    -webkit-box-shadow: 0px 2px 8px 0px rgba(0,0,0,0.37);
+    -moz-box-shadow: 0px 2px 8px 0px rgba(0,0,0,0.37);
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    overflow: hidden;
+    background: rgba(0,0,0,0.1);
+}
+
+.sta_container div {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.piechart_container {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}

@@ -3,11 +3,11 @@ import ListShipper from "../list_shipper/ListShipper";
 import { useState } from "react";
 
 function Shipper() {
-  const [rerenderListShipper, setRerenderListShipper] = useState(false);
+  const [trigerRerender, setTrigerRerender] = useState(false);
   return (
     <div className="content_right_container">
-      <Popup rerender={setRerenderListShipper} />
-      <ListShipper />
+      <Popup setTrigerRerender={setTrigerRerender} />
+      <ListShipper trigerRerender={trigerRerender} />
     </div>
   );
 }

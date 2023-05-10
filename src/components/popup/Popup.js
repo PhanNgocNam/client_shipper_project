@@ -9,12 +9,13 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import loader from "../../assets/img/loader.gif";
 import Axios from "axios";
+import PhoneInput from "react-phone-number-input/input";
 
 const axios = Axios.create({
   baseURL: "http://localhost:4940",
 });
 
-const Popup = ({ rerender }) => {
+const Popup = ({ setTrigerRerender }) => {
   const [isOpen, setIsOpen] = useState(false);
   const popupRef = useRef(null);
 
@@ -42,7 +43,9 @@ const Popup = ({ rerender }) => {
     };
   }, [avatar, blx, cccd]);
 
-  const openPopup = () => setIsOpen(true);
+  const openPopup = () => {
+    setIsOpen(true);
+  };
   const closePopup = () => {
     setIsOpen(false);
     setAvatar("");
@@ -52,7 +55,7 @@ const Popup = ({ rerender }) => {
     setPhoneNumber("");
     setLisence("");
     setOtpExpand(false);
-    rerender(true);
+    setTrigerRerender(!isOpen);
   };
 
   const handleFullNameChange = (event) => {
@@ -64,7 +67,7 @@ const Popup = ({ rerender }) => {
   };
 
   const handleStorageChange = (e) => {
-    setStorage(e.target.value);
+    setStorage(e.target.value || "govap");
   };
 
   const handleLicenseChange = (e) => {
@@ -142,7 +145,7 @@ const Popup = ({ rerender }) => {
     setFormErrors(errors);
     if (errors.length === 0) {
       // Perform registration logic here
-      console.log("Start handle logic in handleSubmit!");
+      // console.log("Start handle logic in handleSubmit!");
       handleAddOneShipper();
     }
   };
@@ -156,7 +159,7 @@ const Popup = ({ rerender }) => {
         size: "invisible",
         callback: (response) => {
           // reCAPTCHA solved, allow signInWithPhoneNumber.
-          console.log("Generate Recapcha Success!");
+          // console.log("Generate Recapcha Success!");
         },
       },
       auth
@@ -196,16 +199,19 @@ const Popup = ({ rerender }) => {
         cccdURL,
         blxURL,
       });
-      // console.log(data);
-      if (data) {
+
+      if (data.status === "success") {
         alert("Thành công, shipper đã được thêm.");
         handleDeleteAllField();
+      } else {
+        console.log(data);
       }
     } catch (err) {
-      console.log(err.message);
+      alert(err.message);
     }
   };
 
+  // console.log(phoneNumber);
   const handleVerifyOtp = () => {
     if (otp.length === 6) {
       let confirmationResult = window.confirmationResult;
@@ -213,7 +219,7 @@ const Popup = ({ rerender }) => {
         .confirm(otp)
         .then((result) => {
           if (result) {
-            console.log("Phone is verified!");
+            // console.log("Phone is verified!");
             handleUploadAvatar();
             handleUploadCccd();
             handleUploadBlx();
@@ -221,7 +227,7 @@ const Popup = ({ rerender }) => {
         })
         .catch((error) => {
           // User couldn't sign in (bad verification code?)
-          console.log(error.message);
+          // console.log(error.message);
         });
     } else {
       alert("Mã otp phải có chính xác 6 ký tự.");
@@ -279,11 +285,11 @@ const Popup = ({ rerender }) => {
 
                 <div>
                   <label htmlFor="phone">Số điện thoại:</label>
-                  <input
-                    type="tel"
+                  <PhoneInput
+                    country="VN"
                     id="phone"
                     value={phoneNumber}
-                    onChange={handlePhoneNumberChange}
+                    onChange={setPhoneNumber}
                   />
                 </div>
 

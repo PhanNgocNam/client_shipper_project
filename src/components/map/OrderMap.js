@@ -11,12 +11,13 @@ const axios = Axios.create({
   baseURL: "http://localhost:4940",
 });
 
-function OrderMap() {
+function OrderMap({ setIsAddOrder }) {
   const center = useMemo(() => [106.687569, 10.822024], []);
   const [address, setAdress] = useState("Địa chỉ nhận hàng...");
   const [orderName, setOrderName] = useState("");
   const [phoneReceive, setPhoneReceive] = useState("");
   const [weight, setWeight] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
   const lngRef = useRef(null);
   const latRef = useRef(null);
   const storageRef = useRef(null);
@@ -65,22 +66,31 @@ function OrderMap() {
   };
 
   const handleAddOneOrder = async () => {
-    const { data } = await axios.post("/order/new", {
-      deliveryAddress: address,
-      phoneReceive: phoneReceive,
-      storage: storageRef.current,
-      coords: {
-        lng: lngRef.current,
-        lat: latRef.current,
-      },
-      orderName: orderName,
-      weight: Number(weight),
-    });
-    if (data.status === "success") {
-      alert("Thêm đơn hàng thành công!");
-      handleCancelAddOrder();
+    const pattern = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
+    if (storageRef.current) {
+      if (pattern.test(phoneReceive)) {
+        const { data } = await axios.post("/order/new", {
+          deliveryAddress: address,
+          phoneReceive: phoneReceive,
+          storage: storageRef.current,
+          coords: {
+            lng: lngRef.current,
+            lat: latRef.current,
+          },
+          orderName: orderName,
+          weight: Number(weight),
+        });
+        if (data.status === "success") {
+          alert("Thêm đơn hàng thành công!");
+          handleCancelAddOrder();
+        } else {
+          alert(data.message);
+        }
+      } else {
+        setErrorMsg("Vui lòng nhập đúng định dạng số điện thoại");
+      }
     } else {
-      alert(data.message);
+      setErrorMsg("Kho không được để trống!");
     }
   };
 
@@ -88,6 +98,7 @@ function OrderMap() {
     setOrderName("");
     setPhoneReceive("");
     setAdress("Địa chỉ nhận hàng...");
+    setErrorMsg("");
   };
 
   return (
@@ -137,6 +148,7 @@ function OrderMap() {
           </h3>
         </div>
 
+        <p className="error_msg">{errorMsg}</p>
         <div className={styles.footerBox}>
           <button onClick={handleAddOneOrder} className={styles.btn_add_order}>
             Thêm đơn hàng
@@ -146,6 +158,12 @@ function OrderMap() {
           </button>
         </div>
       </div>
+      <button
+        className={styles.btn_view_order}
+        onClick={() => setIsAddOrder(false)}
+      >
+        Xem đơn hàng
+      </button>
     </div>
   );
 }

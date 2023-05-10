@@ -16,6 +16,7 @@ function Sidebar() {
     one: false,
     two: false,
     three: false,
+    four: false,
   });
   return (
     <div className={styles.sidebar_container}>
@@ -23,38 +24,51 @@ function Sidebar() {
         <Link
           className={clsx({ [styles.isActive]: isActive.one })}
           to="/admin/shipper"
-          state="> Quản lý shipper"
-          onClick={() => setIsActive({ three: false, two: false, one: true })}
+          state=">> Dashboard > Quản lý shipper"
+          onClick={() =>
+            setIsActive({ three: false, two: false, one: true, four: false })
+          }
         >
           <MdGroups size={28} style={{ marginRight: "1.6em" }} />
           <p>Quản lý shipper</p>
         </Link>
         <Link
           className={clsx({ [styles.isActive]: isActive.two })}
-          onClick={() => setIsActive({ three: false, two: true, one: false })}
+          onClick={() =>
+            setIsActive({ three: false, two: true, one: false, four: false })
+          }
           to="/admin/order"
-          state="> Quản lý đơn hàng"
+          state=">> Dashboard > Quản lý đơn hàng"
         >
           <MdListAlt size={28} style={{ marginRight: "1.6em" }} />
           <p>Quản lý đơn hàng</p>
         </Link>
         <Link
-          onClick={() => setIsActive({ three: true, two: false, one: false })}
+          onClick={() =>
+            setIsActive({ three: true, two: false, one: false, four: false })
+          }
           className={clsx({ [styles.isActive]: isActive.three })}
           to="/admin/resetPW"
-          state="> Đổi mật khẩu"
+          state=">> Dashboard > Đổi mật khẩu"
         >
           <MdOutlineHelp size={26} style={{ marginRight: "1.6em" }} />
           Đổi mật khẩu
         </Link>
-        {/* <Link to="/admin/sta" state="> Thống kê">
+        <Link
+          to="/admin/sta"
+          state=">> Dashboard > Thống kê"
+          className={clsx({ [styles.isActive]: isActive.four })}
+          onClick={() =>
+            setIsActive({ three: false, two: false, one: false, four: true })
+          }
+        >
           <MdOutlineIncompleteCircle
             size={28}
             style={{ marginRight: "1.6em" }}
           />
           <p>Thống kê</p>
         </Link>
-        <Link to="/admin/tracking" state="> Tracking">
+        {/* <Link to="/admin/tracking" state="> Tracking">
           <MdNotListedLocation size={28} style={{ marginRight: "1.6em" }} />
           <p>Tracking</p>
         </Link> */}

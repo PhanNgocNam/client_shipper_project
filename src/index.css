@@ -100,7 +100,7 @@ img {
   margin: 0;
 }
 
-.mapboxgl-ctrl {
+.mapboxgl-ctrl .mapboxgl-ctrl-geocoder {
   border: 1px solid ;
   width: 100%;
   padding: 0;
@@ -108,5 +108,12 @@ img {
 
 .mapboxgl-ctrl svg {
   display: none;
+}
+
+/* Error message */
+.error_msg {
+  color: red;
+  font-size: 1.3rem;
+  font-weight: 600;
 }
 
