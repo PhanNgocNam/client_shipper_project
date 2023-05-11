@@ -95,7 +95,7 @@ function SearchBar({
                 onClick={() => handleSelectAnItem(data)}
               >
                 <h2>{data.fullName} </h2>
-                <h3>SĐT: {data._id}</h3>
+                <h3>SĐT: {data.phoneReceive}</h3>
               </div>
             );
           })}

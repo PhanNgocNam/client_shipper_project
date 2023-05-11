@@ -50,7 +50,8 @@ function OrderMap({ setIsAddOrder }) {
     geocoder.on("result", (event) => {
       const { center, place_name } = event.result;
       setAdress(place_name);
-      console.log(event.result);
+      lngRef.current = center[0];
+      latRef.current = center[1];
       map.flyTo({
         center,
         zoom: 16,

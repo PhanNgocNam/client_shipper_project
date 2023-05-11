@@ -34,7 +34,7 @@ function ResetPassword() {
       setErr(data.message);
     } else {
       alert("Đổi mật khẩu thành công!");
-      navigate("/admin");
+      navigate("/admin/welcome");
     }
   };
   return (

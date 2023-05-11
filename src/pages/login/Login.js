@@ -21,7 +21,7 @@ function Login() {
       username,
       password,
     });
-    console.log(data);
+
     if (!data.status) {
       setErr(data.message);
     } else {
@@ -34,7 +34,7 @@ function Login() {
       if (data.admin.isFirstLogin) {
         navigate("/admin/resetPW");
       } else {
-        navigate("/admin");
+        navigate("/admin/welcome");
       }
     }
   };
