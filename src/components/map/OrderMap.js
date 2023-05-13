@@ -6,9 +6,10 @@ import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { MAPBOX_API_KEY } from "../../utils/APIRoute";
 import Axios from "axios";
+import { baseURL } from "../../utils/APIRoute";
 
 const axios = Axios.create({
-  baseURL: "http://localhost:4940",
+  baseURL: baseURL,
 });
 
 function OrderMap({ setIsAddOrder }) {
