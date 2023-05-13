@@ -10,9 +10,10 @@ import { v4 } from "uuid";
 import loader from "../../assets/img/loader.gif";
 import Axios from "axios";
 import PhoneInput from "react-phone-number-input/input";
+import { baseURL } from "../../utils/APIRoute";
 
 const axios = Axios.create({
-  baseURL: "http://localhost:4940",
+  baseURL: baseURL,
 });
 
 const Popup = ({ setTrigerRerender }) => {
