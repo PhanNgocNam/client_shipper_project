@@ -19,8 +19,11 @@
         height: 50px;
         display: flex;
         justify-content: center;
-        align-items: center;
-        
+        img {
+            width: 14%;
+            border-radius: 50%;
+            
+        }
     }
     
     .user_container {

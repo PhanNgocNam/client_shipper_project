@@ -50,6 +50,8 @@ function SearchBar({
     setDateWasSelected(e.target.value);
   };
 
+  // console.log(dateWasSelected);
+
   return (
     <div className="search">
       <div className="searchInputs">
@@ -85,7 +87,7 @@ function SearchBar({
       ) : (
         <RejectButton style={{ flex: 1 }} content="Xác nhận trả đủ hàng" />
       )}
-      {filteredData.length != 0 && (
+      {filteredData.length !== 0 && (
         <div className="dataResult">
           {filteredData.slice(0, 15).map((data, key) => {
             return (

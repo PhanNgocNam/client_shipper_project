@@ -23,7 +23,7 @@ function ListShipper({ trigerRerender }) {
 
   useEffect(() => {
     socket.on("receive-location", (data) => {
-      console.log(data);
+      // console.log(data);
       sessionStorage.setItem("shipperLocation", JSON.stringify(data));
     });
 

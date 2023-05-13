@@ -1,0 +1,137 @@
+.homePageCon {
+    height: 100vh;
+    width: 100%;
+    /* background: rebeccapurple; */
+}
+
+.homePageCon .homePageHeader {
+    display: flex;
+    padding:0 10em;
+    height: 10vh;background: var(--primary-color);
+}
+
+.homePageCon .logoDiv {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.homePageCon .logoDiv img {
+    width: 5em;
+    height: 5em;
+    object-fit: scale-down;
+    border-radius: 50%;
+}
+
+.homePageCon .menuDiv {
+    display: flex;
+    flex: 3;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.homePageCon .menuDiv li {
+    list-style: none;
+    margin: 0 2em;
+    font-size: 1.6rem;
+    cursor: pointer;
+    color: rgba(0,0,0,.8);
+}
+
+.homePageCon .menuDiv li img {
+    width: 14px;
+    height: 14px;
+}
+
+
+.homePageCon .menuDiv img {
+    width: 5%;
+}
+
+.homePageMainContent {
+    height: 80vh;
+    margin: 5vh 10em;
+    
+    overflow: auto;
+    box-shadow: 0px 2px 8px 0px rgba(0,0,0,0.37);
+    -webkit-box-shadow: 0px 2px 8px 0px rgba(0,0,0,0.37);
+    -moz-box-shadow: 0px 2px 8px 0px rgba(0,0,0,0.37);
+}
+
+.homePageMainContent .right {
+    float: right;
+    width: 49%;
+    height: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.homePageMainContent li {
+    font-size: 1.3rem;
+    letter-spacing: 1px;
+}
+
+.homePageCon .menuDiv li:hover {
+    text-decoration: underline;
+    color: rgba(255,255,255,.6);
+}
+
+.homePageMainContent .left {
+    float: left;
+    width: 50%;
+    height: inherit;
+    display: flex;
+    flex-direction: column;
+    padding: 4em;
+    background: bisque;
+}
+
+.homePageMainContent .left img {
+    width: 14px;
+    height: 14px;
+    margin-right: 6px;
+}
+
+.homePageMainContent .left h1 {
+    font-size: 2.75rem;
+    font-weight: 900;
+    flex: 1;
+    letter-spacing: 1.1px;
+    display: flex;
+    align-items: flex-end;
+}
+
+.homePageMainContent .left h2 {
+    font-size: 1.7rem;
+    font-weight: 700;
+    flex: 1;
+    letter-spacing: 1.1px;
+    display: flex;
+    align-items: center;
+}
+
+.homePageMainContent .left ul {
+    flex: 2;
+}
+
+.homePageMainContent .left button {
+    /* flex: 1; */
+    width: 100px;
+    background: var(--primary-color);
+    color: white;
+    padding: .1em;
+    font-size: 1rem;
+    font-weight: 700;
+    height: 50px;
+}
+
+.homePage-main-content .left button:hover {
+    text-decoration: underline;
+}
+
+.isActive {
+    color: rgba(255,255,255,.6) !important;
+    text-decoration: underline;
+}

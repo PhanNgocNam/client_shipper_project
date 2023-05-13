@@ -81,7 +81,7 @@ function OrderMap({ setIsAddOrder }) {
           orderName: orderName,
           weight: Number(weight),
         });
-        if (data.status === "success") {
+        if (data.message === "Success!") {
           alert("Thêm đơn hàng thành công!");
           handleCancelAddOrder();
         } else {
@@ -99,6 +99,7 @@ function OrderMap({ setIsAddOrder }) {
     setOrderName("");
     setPhoneReceive("");
     setAdress("Địa chỉ nhận hàng...");
+    setWeight(0);
     setErrorMsg("");
   };
 

@@ -12,6 +12,7 @@ import OrderMap from "./components/map/OrderMap";
 import { socket } from "./socket";
 import { useEffect } from "react";
 import Welcome from "./components/welcome/Welcome";
+import HomePage from "./pages/home/Home";
 
 function App() {
   useEffect(() => {
@@ -22,7 +23,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/*" element={<PageNotFound />} />
-        <Route path="/" element={<OverviewLayout />} />
+        <Route path="/" element={<HomePage />} />
 
         <Route path="/admin" element={<OverviewLayout />}>
           <Route path="welcome" element={<Welcome />} />
