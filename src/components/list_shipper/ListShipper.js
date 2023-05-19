@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styles from "./listShipper.module.scss";
-// import Axios from "axios";
 import loading from "../../assets/img/loading.gif";
+import clsx from "clsx";
 
 import { baseURL } from "../../utils/APIRoute";
 import TrackingPopup from "../popup/TrackingPopup";
@@ -11,6 +11,9 @@ import UpdatePopup from "../popup/UpdatePopup";
 import { axios } from "../../axiosConfig";
 
 function ListShipper({ trigerRerender }) {
+  // useMemo(() => onlineArray, [onlineArray.length]);
+  // const onlineArray = [];
+  const onlineArrayRef = useRef([]);
   const [shipperData, setShipperData] = useState([]);
   const [newShipperList, setNewShipperList] = useState([]);
   const [singleShiper, setSingleShipper] = useState({});
@@ -21,14 +24,29 @@ function ListShipper({ trigerRerender }) {
   const [storageUpdate, setStorageUpdate] = useState("");
   const [licenseUpdate, setLicenseUpdate] = useState("");
 
+  const [shipperLocation, setShipperLocation] = useState([]);
+  // const [onlineArray, setOnlineArray] = useState([]);
+
   useEffect(() => {
     socket.on("receive-location", (data) => {
-      // console.log(data);
       sessionStorage.setItem("shipperLocation", JSON.stringify(data));
+      setShipperLocation(data);
+      if (shipperLocation.length === 0) {
+        onlineArrayRef.current = [];
+      }
     });
 
     return () => {};
   }, [socket]);
+
+  useEffect(() => {
+    sessionStorage.setItem("shipperLocation", JSON.stringify([]));
+  }, []);
+
+  useEffect(() => {
+    // setShipperLocation(JSON.parse(sessionStorage.getItem("shipperLocation")));
+    console.log("re-render!");
+  }, [shipperLocation]);
 
   const handleGetAllShipper = async () => {
     if (shipperData.length === 0) {
@@ -93,6 +111,8 @@ function ListShipper({ trigerRerender }) {
     }
   };
 
+  console.log(onlineArrayRef.current);
+
   return (
     <div className={styles.shipper_container}>
       {shipperData.length === 0 ? (
@@ -137,48 +157,71 @@ function ListShipper({ trigerRerender }) {
               defaultValue={singleShiper.license}
             />
           </UpdatePopup>
-          {shipperData.map((shipper) => (
-            <div
-              onClick={() => setSingleShipper(shipper)}
-              className={styles.innerDiv}
-              key={shipper._id}
-            >
-              <img
-                onClick={() => {
-                  if (sessionStorage.getItem("shipperLocation") === null) {
-                    alert("Hiện chưa có shipper nào đang online!");
-                  } else if (
-                    JSON.parse(sessionStorage.getItem("shipperLocation"))
-                      .length > 0
-                  ) {
-                    setIsOpen(true);
-                  } else {
-                    alert("Hiện chưa có shipper nào đang online!");
-                  }
-                }}
-                src={shipper.avatarURL}
-                alt="Avatar"
-              />
-              <h2>Tên: {shipper.fullName}</h2>
-              <h3>Kho: {shipper.storage}</h3>
-              <h3>Biển số: {shipper.license}</h3>
-              <h3>Số điện thoại: {shipper.phoneNumber}</h3>
-              <div className={styles.innerDivFooter}>
-                <button
-                  onClick={() => setIsUpdate(true)}
-                  className="btn_perform"
-                >
-                  Cập nhật
-                </button>
-                <button
-                  className="btn_delete"
-                  onClick={() => setIsDelete(true)}
-                >
-                  Xóa
-                </button>
+          {shipperData.map((shipper, index) => {
+            if (
+              JSON.parse(sessionStorage.getItem("shipperLocation")).length > 0
+            ) {
+              const ind =
+                JSON.parse(sessionStorage.getItem("shipperLocation")).findIndex(
+                  (ship) => ship.shipperID === shipper._id
+                ) + 1;
+
+              if (ind) {
+                onlineArrayRef.current[index] = true;
+              } else {
+                onlineArrayRef.current[index] = false;
+              }
+            } else {
+            }
+
+            return (
+              <div
+                onClick={() => setSingleShipper(shipper)}
+                className={styles.innerDiv}
+                key={shipper._id}
+              >
+                <div
+                  className={`${styles.offline} ${clsx({
+                    [styles.online]: onlineArrayRef.current[index],
+                  })}`}
+                />
+                <img
+                  onClick={() => {
+                    if (sessionStorage.getItem("shipperLocation") === null) {
+                      alert("Hiện chưa có shipper nào đang online!");
+                    } else if (
+                      JSON.parse(sessionStorage.getItem("shipperLocation"))
+                        .length > 0
+                    ) {
+                      setIsOpen(true);
+                    } else {
+                      alert("Hiện chưa có shipper nào đang online!");
+                    }
+                  }}
+                  src={shipper.avatarURL}
+                  alt="Avatar"
+                />
+                <h2>Tên: {shipper.fullName}</h2>
+                <h3>Kho: {shipper.storage}</h3>
+                <h3>Biển số: {shipper.license}</h3>
+                <h3>Số điện thoại: {shipper.phoneNumber}</h3>
+                <div className={styles.innerDivFooter}>
+                  <button
+                    onClick={() => setIsUpdate(true)}
+                    className="btn_perform"
+                  >
+                    Cập nhật
+                  </button>
+                  <button
+                    className="btn_delete"
+                    onClick={() => setIsDelete(true)}
+                  >
+                    Xóa
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </>
       ) : (
         newShipperList.map((shipper) => (

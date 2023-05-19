@@ -10,6 +10,8 @@ function Statistics() {
   const [shipperWasSelected, setShipperWasSelected] = useState(null);
   const [numberOfSucessOrder, setNumberOfSucessOrder] = useState(null);
   const [numberOfFailureOrder, setNumberOfFailureOrder] = useState(null);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   const [totalNumberOfOrder, setTotalNumberOfOrder] = useState(null);
   const [dateWasSelected, setDateWasSelected] = useState("");
@@ -66,6 +68,28 @@ function Statistics() {
       setNumberOfFailureOrder(numOfFailure);
     }
   };
+
+  const handleGetNumberOfOrderBetweenTwoDate = async (req, res) => {
+    if (startDate && endDate) {
+      const startDateInDateSecformat = new Date(startDate).getTime();
+      const endDateInDateSecformat = new Date(endDate).getTime();
+      if (startDateInDateSecformat >= endDateInDateSecformat) {
+        alert("Lỗi: ngày bắt đầu phải nhỏ hơn ngày kết thúc!");
+      } else {
+        const { data } = await axios.get(
+          `/historyOrder/getHistoryOrderBetweenTwoDate/${shipperWasSelected._id}?startDate=${startDate}&endDate=${endDate}`
+          // /historyOrder/getHistoryOrderBetweenTwoDate/6449db1e1ccbe1c4892f7d1a?startDate=2023-05-16&endDate=2023-05-19
+        );
+        const { numOfTotal, numOfSucess, numOfFailure } = data;
+        if (data) {
+          setTotalNumberOfOrder(numOfTotal);
+          setNumberOfSucessOrder(numOfSucess);
+          setNumberOfFailureOrder(numOfFailure);
+        }
+        console.log(data);
+      }
+    }
+  };
   // console.log(dateWasSelected);
   const data = [
     { name: "Giao Thành công", value: numberOfSucessOrder || 0 },
@@ -82,6 +106,8 @@ function Statistics() {
   //   },
   // ];
 
+  console.log("st :" + startDate + ", ", "end" + endDate);
+
   return (
     <div className="content_right_container">
       {shipperData && (
@@ -97,28 +123,30 @@ function Statistics() {
         />
       )}
       <div className={styles.sta_container}>
-        {/* <div>
-          {shipperWasSelected ? (
-            <BarChart width={400} height={450} data={data2}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="Sucess" fill="#743f7e" />
-              <Bar dataKey="Failure" fill="#E06900" />
-            </BarChart>
-          ) : (
-            ""
-          )}
-        </div> */}
         <div>
           {shipperWasSelected ? (
-            <PieCharts
-              className={styles.piechart_container}
-              data={data}
-              COLORS={COLORS}
-            />
+            <>
+              <div>
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                />
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                />
+                <button onClick={() => handleGetNumberOfOrderBetweenTwoDate()}>
+                  Xem thống kê
+                </button>
+              </div>
+              <PieCharts
+                className={styles.piechart_container}
+                data={data}
+                COLORS={COLORS}
+              />
+            </>
           ) : (
             ""
           )}

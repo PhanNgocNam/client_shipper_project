@@ -22,7 +22,7 @@ function SearchBar({
     const searchWord = event.target.value;
     setWordEntered(searchWord);
     const newFilter = data.filter((value) => {
-      return value.fullName.toLowerCase().includes(searchWord.toLowerCase());
+      return value.phoneNumber.toLowerCase().includes(searchWord.toLowerCase());
     });
 
     if (searchWord === "") {
@@ -40,7 +40,7 @@ function SearchBar({
   };
 
   const handleSelectAnItem = (shipper) => {
-    setWordEntered(shipper.fullName);
+    setWordEntered(shipper.phoneNumber);
     setFilteredData([]);
     setShipperWasSelected(shipper);
     setDateWasSelected("");
@@ -97,7 +97,7 @@ function SearchBar({
                 onClick={() => handleSelectAnItem(data)}
               >
                 <h2>{data.fullName} </h2>
-                <h3>SĐT: {data.phoneReceive}</h3>
+                <h3>SĐT: {data.phoneNumber}</h3>
               </div>
             );
           })}

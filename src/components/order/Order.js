@@ -80,7 +80,6 @@ function Order() {
   };
 
   const handleUpdateOneOrder = async () => {
-    // const {data} = await axios
     const { _id } = singleOrder;
     const { data } = await axios.put(`/order/updateOneOrder/${_id}`, {
       deliveryAddress: adressUpdate
@@ -94,17 +93,21 @@ function Order() {
       weight: weightUpdate ? weightUpdate : singleOrder.weight,
       coords: coordsUpdate ? coordsUpdate : singleOrder.coords,
     });
-    // console.log(data);
+    console.log(data);
     if (data.status === "success") {
-      // console.log(data);
       setIsOrderUpdate(false);
       handleMakeAllFieldBecomeNull();
       const index = orderList.findIndex(
         (order) => order._id === data.order._id
       );
+      console.log(data);
       if (index >= 0) {
         orderList.splice(index, 1, data.order);
       }
+    } else {
+      console.log(
+        "This log come from else block when data is not respone with status = success"
+      );
     }
   };
 
