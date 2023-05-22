@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { axios } from "../../axiosConfig";
 import SearchBar from "../search_bar/SearchBar";
 import styles from "./sta.module.scss";
 
 import PieCharts from "../charts/PieCharts";
+import { useTable, useSortBy } from "react-table";
 
 function Statistics() {
   const [shipperData, setShipperData] = useState([]);
@@ -15,12 +16,15 @@ function Statistics() {
 
   const [totalNumberOfOrder, setTotalNumberOfOrder] = useState(null);
   const [dateWasSelected, setDateWasSelected] = useState("");
+
+  const [detailOrders, setDetailOrders] = useState([]);
   const handleGetAllShipper = async () => {
     if (shipperData.length === 0) {
       const { data } = await axios.get("/shipper/all");
       setShipperData(data);
     }
   };
+
   useEffect(() => {
     handleGetAllShipper();
     return () => {};
@@ -61,11 +65,12 @@ function Statistics() {
     const { data } = await axios.get(
       `/historyOrder/getHistoryOrderByShipperIdAndDate/${shipperWasSelected._id}?dateAdded=${dateWasSelected}`
     );
-    const { numOfTotal, numOfSucess, numOfFailure } = data;
+    const { numOfTotal, numOfSucess, numOfFailure, orders } = data;
     if (data) {
       setTotalNumberOfOrder(numOfTotal);
       setNumberOfSucessOrder(numOfSucess);
       setNumberOfFailureOrder(numOfFailure);
+      setDetailOrders(orders);
     }
   };
 
@@ -80,33 +85,97 @@ function Statistics() {
           `/historyOrder/getHistoryOrderBetweenTwoDate/${shipperWasSelected._id}?startDate=${startDate}&endDate=${endDate}`
           // /historyOrder/getHistoryOrderBetweenTwoDate/6449db1e1ccbe1c4892f7d1a?startDate=2023-05-16&endDate=2023-05-19
         );
-        const { numOfTotal, numOfSucess, numOfFailure } = data;
+        const { numOfTotal, numOfSucess, numOfFailure, orders } = data;
         if (data) {
           setTotalNumberOfOrder(numOfTotal);
           setNumberOfSucessOrder(numOfSucess);
           setNumberOfFailureOrder(numOfFailure);
+          setDetailOrders(orders);
         }
         console.log(data);
       }
     }
   };
-  // console.log(dateWasSelected);
+
+  const fetchOrders = async () => {
+    if (shipperWasSelected) {
+      const { data } = await axios
+        .get(
+          `/historyOrder/getHistoryOrderByShipperIdForTableData/${shipperWasSelected._id}`
+        )
+        .catch((err) => console.log(err));
+
+      if (data.orders.length > 0) {
+        setDetailOrders(data.orders);
+      }
+    }
+  };
+
+  console.log(detailOrders);
+
+  const detailOrdersData = useMemo(() => {
+    return [...detailOrders];
+  }, [detailOrders]);
+
+  const detailOrdersColumns = useMemo(
+    () => [
+      {
+        Header: "Tên sản phẩm",
+        accessor: "orderName",
+      },
+      {
+        Header: "Địa chỉ",
+        accessor: "deliveryAddress",
+      },
+      {
+        Header: "SDT người nhận",
+        accessor: "phoneReceive",
+      },
+      {
+        Header: "Kho",
+        accessor: "storage",
+      },
+      {
+        Header: "Trọng lượng",
+        accessor: "weight",
+      },
+      {
+        Header: "Trạng thái",
+        accessor: "status",
+      },
+      {
+        Header: "Ngày tạo đơn",
+        accessor: "dateAdded",
+      },
+      {
+        Header: "Ngày giao",
+        accessor: "dateDeliver",
+      },
+    ],
+    []
+  );
+
+  const tableInstance = useTable(
+    {
+      columns: detailOrdersColumns,
+      data: detailOrdersData,
+    },
+    useSortBy
+  );
+
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    tableInstance;
+
+  useEffect(() => {
+    fetchOrders();
+  }, [shipperWasSelected]);
+
   const data = [
     { name: "Giao Thành công", value: numberOfSucessOrder || 0 },
     { name: "Giao thất bại", value: numberOfFailureOrder || 0 },
   ];
 
   const COLORS = ["#743f7e", "#E06900", "#FFBB28"];
-
-  // const data2 = [
-  //   {
-  //     name: shipperWasSelected ? shipperWasSelected.fullName : "Tên shipper...",
-  //     Sucess: numberOfSucessOrder || 0,
-  //     Failure: numberOfFailureOrder || 0,
-  //   },
-  // ];
-
-  console.log("st :" + startDate + ", ", "end" + endDate);
 
   return (
     <div className="content_right_container">
@@ -123,9 +192,9 @@ function Statistics() {
         />
       )}
       <div className={styles.sta_container}>
-        <div>
-          {shipperWasSelected ? (
-            <>
+        {shipperWasSelected ? (
+          <>
+            <div>
               <div>
                 <input
                   type="date"
@@ -141,16 +210,77 @@ function Statistics() {
                   Xem thống kê
                 </button>
               </div>
-              <PieCharts
-                className={styles.piechart_container}
-                data={data}
-                COLORS={COLORS}
-              />
-            </>
-          ) : (
-            ""
-          )}
-        </div>
+
+              <div>
+                <table border={1} {...getTableProps()}>
+                  <thead>
+                    {
+                      // Loop over the header rows
+                      headerGroups.map((headerGroup) => (
+                        // Apply the header row props
+                        <tr {...headerGroup.getHeaderGroupProps()}>
+                          {
+                            // Loop over the headers in each row
+                            headerGroup.headers.map((column) => (
+                              // Apply the header cell props
+                              <th
+                                {...column.getHeaderProps(
+                                  column.getSortByToggleProps()
+                                )}
+                              >
+                                {
+                                  // Render the header
+                                  column.render("Header")
+                                }
+                                {column.isSorted
+                                  ? column.isSortedDesc
+                                    ? " ▼"
+                                    : " ▲"
+                                  : ""}
+                              </th>
+                            ))
+                          }
+                        </tr>
+                      ))
+                    }
+                  </thead>
+                  {/* Apply the table body props */}
+                  <tbody {...getTableBodyProps()}>
+                    {
+                      // Loop over the table rows
+                      rows.map((row) => {
+                        // Prepare the row for display
+                        prepareRow(row);
+                        return (
+                          // Apply the row props
+                          <tr {...row.getRowProps()}>
+                            {
+                              // Loop over the rows cells
+                              row.cells.map((cell) => {
+                                // Apply the cell props
+                                return (
+                                  <td {...cell.getCellProps()}>
+                                    {
+                                      // Render the cell contents
+                                      cell.render("Cell")
+                                    }
+                                  </td>
+                                );
+                              })
+                            }
+                          </tr>
+                        );
+                      })
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <PieCharts data={data} COLORS={COLORS} />
+          </>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );

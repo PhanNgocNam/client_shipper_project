@@ -30,12 +30,12 @@ function PieCharts({ data, COLORS }) {
 
   return (
     <>
-      <PieChart width={600} height={600}>
+      <PieChart width={300} height={600}>
         <Pie
           data={data}
           labelLine={false}
           label={renderCustomizedLabel}
-          outerRadius={220}
+          outerRadius={260}
           fill="#8884d8"
           dataKey="value"
         >

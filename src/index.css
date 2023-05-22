@@ -119,3 +119,21 @@ img {
   font-weight: 600;
 }
 
+
+.recharts-wrapper {
+  height: inherit !important;
+  width: 40% !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  /* background: #E06900 !important; */
+}
+
+.recharts-surface {
+  height: inherit !important;
+  width: 100% !important;
+}
+
+
+
+
