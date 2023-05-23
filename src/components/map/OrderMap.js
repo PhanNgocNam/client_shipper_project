@@ -71,22 +71,26 @@ function OrderMap({ setIsAddOrder }) {
     const pattern = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
     if (storageRef.current) {
       if (pattern.test(phoneReceive)) {
-        const { data } = await axios.post("/order/new", {
-          deliveryAddress: address,
-          phoneReceive: phoneReceive,
-          storage: storageRef.current,
-          coords: {
-            lng: lngRef.current,
-            lat: latRef.current,
-          },
-          orderName: orderName,
-          weight: Number(weight),
-        });
-        if (data.message === "Success!") {
-          alert("Thêm đơn hàng thành công!");
-          handleCancelAddOrder();
+        if (Number(weight) <= 0) {
+          setErrorMsg("Trọng lượng phải lớn hơn 0");
         } else {
-          alert(data.message);
+          const { data } = await axios.post("/order/new", {
+            deliveryAddress: address,
+            phoneReceive: phoneReceive,
+            storage: storageRef.current,
+            coords: {
+              lng: lngRef.current,
+              lat: latRef.current,
+            },
+            orderName: orderName,
+            weight: Number(weight),
+          });
+          if (data.message === "Success!") {
+            alert("Thêm đơn hàng thành công!");
+            handleCancelAddOrder();
+          } else {
+            alert(data.message);
+          }
         }
       } else {
         setErrorMsg("Vui lòng nhập đúng định dạng số điện thoại");
