@@ -109,6 +109,10 @@ img {
   width: 100% !important;
 }
 
+.mapboxgl-ctrl-geocoder.mapboxgl-ctrl {
+  width: 100% !important;
+}
+
 
 .mapboxgl-ctrl svg {
   display: none;
