@@ -13,6 +13,7 @@ import { socket } from "./socket";
 import { useEffect } from "react";
 import Welcome from "./components/welcome/Welcome";
 import HomePage from "./pages/home/Home";
+import Register from "./pages/register/Register";
 
 function App() {
   useEffect(() => {
@@ -21,7 +22,8 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/*" element={<PageNotFound />} />
         <Route path="/" element={<HomePage />} />
 

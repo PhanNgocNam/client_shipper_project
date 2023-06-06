@@ -43,10 +43,7 @@ function ListShipper({ trigerRerender }) {
     sessionStorage.setItem("shipperLocation", JSON.stringify([]));
   }, []);
 
-  useEffect(() => {
-    // setShipperLocation(JSON.parse(sessionStorage.getItem("shipperLocation")));
-    console.log("re-render!");
-  }, [shipperLocation]);
+  useEffect(() => {}, [shipperLocation]);
 
   const handleGetAllShipper = async () => {
     if (shipperData.length === 0) {

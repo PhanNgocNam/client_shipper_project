@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../features/admin/authSlice";
 import styles from "./main_nav.module.scss";
 import adminAvatar from "../../assets/img/admin.png";
-import logo from "../../assets/img/logo.png";
 
 function Mainnav() {
   const lable = useLocation();
@@ -13,7 +12,7 @@ function Mainnav() {
   const isLogged = useSelector((state) => state.admin.accessToken);
   const handleLogout = () => {
     dispatch(logout());
-    navigate("/login");
+    navigate("/");
   };
 
   return (

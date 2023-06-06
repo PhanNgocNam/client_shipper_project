@@ -50,5 +50,15 @@
             font-weight: 400;
             padding: 1em 0 0 0;
         }
+
+        a {
+            font-size: 1.2rem;
+            text-decoration: none;
+            color: rgb(215, 230, 250);
+        }
+
+        a:hover {
+            color: rgb(32, 32, 202);
+        }
     }
 }

@@ -5,6 +5,7 @@ import Axios from "axios";
 import { baseURL } from "../../utils/APIRoute";
 import { useDispatch, useSelector } from "react-redux";
 import { loggin } from "../../features/admin/authSlice";
+import { Link } from "react-router-dom";
 
 const axios = Axios.create({
   baseURL: baseURL,
@@ -32,7 +33,7 @@ function Login() {
         })
       );
       if (data.admin.isFirstLogin) {
-        navigate("/admin/resetPW");
+        navigate("/admin/welcome");
       } else {
         navigate("/admin/welcome");
       }
@@ -62,6 +63,7 @@ function Login() {
 
         <h3>{err}</h3>
         <button type="submit">Đăng nhập</button>
+        <Link to="/register">Đăng ký tài khoản</Link>
       </form>
     </div>
   );
