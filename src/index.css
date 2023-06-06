@@ -129,6 +129,7 @@ img {
 .recharts-wrapper {
   height: inherit !important;
   max-width: 40% !important;
+  width: 40% !important;
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
