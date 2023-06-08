@@ -187,7 +187,7 @@ function Statistics() {
           numberOfSucessOrder={numberOfSucessOrder}
           totalNumberOfOrder={totalNumberOfOrder}
           setShipperWasSelected={setShipperWasSelected}
-          placeholder="Nhập tên shipper..."
+          placeholder="Nhập số điện thoại shipper..."
           data={shipperData}
         />
       )}
