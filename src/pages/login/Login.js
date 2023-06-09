@@ -65,7 +65,7 @@ function Login() {
 
         <h3>{err}</h3>
         <button type="submit">Đăng nhập</button>
-        <span>{showWaiting ? "Waiting a minute..." : ""}</span>
+        {err ? "" : <span>{showWaiting ? "" : "Wait a minute..."}</span>}
         <Link to="/register">Đăng ký tài khoản</Link>
       </form>
     </div>
