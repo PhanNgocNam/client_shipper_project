@@ -16,6 +16,7 @@ function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
+  const [showWaiting, setShowWating] = useState(false);
 
   const handleAuth = async () => {
     const { data } = await axios.post("/auth/admin/login", {
@@ -41,6 +42,7 @@ function Login() {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    setShowWating(true);
     handleAuth();
   };
 
@@ -63,6 +65,7 @@ function Login() {
 
         <h3>{err}</h3>
         <button type="submit">Đăng nhập</button>
+        <span>{showWaiting ? "Waiting a minute..." : ""}</span>
         <Link to="/register">Đăng ký tài khoản</Link>
       </form>
     </div>
