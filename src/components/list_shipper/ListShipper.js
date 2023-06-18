@@ -108,7 +108,7 @@ function ListShipper({ trigerRerender }) {
     }
   };
 
-  console.log(onlineArrayRef.current);
+ 
 
   return (
     <div className={styles.shipper_container}>
