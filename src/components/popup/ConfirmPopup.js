@@ -28,7 +28,6 @@ function ConfirmPopup({
     }
   };
 
-  // console.log(shipper);
   const handleDeleteShipper = async () => {
     const { data } = await axios.delete(`shipper/${shipper._id}`);
     if (data.status === "success") {
@@ -74,9 +73,7 @@ function ConfirmPopup({
                 />
               </span>
             </div>
-            {/* <div className={stylesForConfirmPopup.popup_body}>
-              sadjksajdlksajd
-            </div> */}
+
             <div className={styles.popup_footer}>
               <AcceptButton
                 content="Xóa"

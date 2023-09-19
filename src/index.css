@@ -1,24 +1,164 @@
-@import url('https://fonts.googleapis.com/css2?family=Arima+Madurai:wght@100;200;300;400;500;700;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Arima+Madurai:wght@100;200;300;400;500;700;800&display=swap");
+
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
 
 html {
   box-sizing: border-box;
   font-size: 62.5%;
-  font-family: 'Arima Madurai', cursive;
-  
+  font-family: "Arima Madurai", cursive;
 }
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: inherit;
 }
 
-body, h1, h2, h3, h4, h5, h6, p, ol, ul {
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ol,
+ul {
   margin: 0;
   padding: 0;
   font-weight: normal;
-  
 }
 
-ol, ul {
+ol,
+ul {
   list-style: none;
 }
 
@@ -29,7 +169,7 @@ img {
 
 :root {
   --primary-color: #743f7e;
-  --secondary-color: #E06900;
+  --secondary-color: #e06900;
 }
 
 .content_right_container {
@@ -41,7 +181,6 @@ img {
   position: relative;
   overflow: auto;
 }
-
 
 /* begin global popup animation */
 .popup-enter {
@@ -67,11 +206,15 @@ img {
 }
 /* end global popup animation */
 
+.ant-collapse-expand-icon {
+  color: rgba(255, 255, 255, 0.9);
+}
+
 /* Start global button */
 .btn_delete {
   border: none;
-  background: rgba(0,0,0, .3);
-  padding: .4em .8em;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.4em 0.8em;
   cursor: pointer;
   border-radius: 3px;
   margin: 0 3px;
@@ -79,8 +222,8 @@ img {
 
 .btn_perform {
   border: none;
-  box-shadow: 0px 0px 5px rgba(0,0,0, .25);
-  padding: .4em .8em;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.25);
+  padding: 0.4em 0.8em;
   background: var(--secondary-color);
   border-radius: 3px;
   margin: 0 3px;
@@ -103,7 +246,7 @@ img {
 }
 
 .mapboxgl-ctrl .mapboxgl-ctrl-geocoder {
-  border: 1px solid ;
+  border: 1px solid;
   width: 100%;
   padding: 0;
   width: 100% !important;
@@ -112,7 +255,6 @@ img {
 .mapboxgl-ctrl-geocoder.mapboxgl-ctrl {
   width: 100% !important;
 }
-
 
 .mapboxgl-ctrl svg {
   display: none;
@@ -124,7 +266,6 @@ img {
   font-size: 1.3rem;
   font-weight: 600;
 }
-
 
 .recharts-wrapper {
   height: inherit !important;
@@ -140,7 +281,3 @@ img {
   height: inherit !important;
   width: 100% !important;
 }
-
-
-
-

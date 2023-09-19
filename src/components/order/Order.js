@@ -43,8 +43,6 @@ function Order() {
           const { center, place_name } = event.result;
           setAdressUpdate(place_name);
           setCoordsUpdate({ lng: center[0], lat: center[1] });
-          // console.log(event.result);
-          // console.log(center);
         });
       }
     }
