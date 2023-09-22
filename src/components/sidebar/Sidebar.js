@@ -169,7 +169,6 @@ function Sidebar() {
         accordion
         items={items}
         bordered={false}
-        defaultActiveKey={2}
         expandIconPosition="right"
       />
       ;

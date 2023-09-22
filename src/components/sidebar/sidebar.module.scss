@@ -35,6 +35,15 @@
       rgba(0, 0, 0, 0.3),
       rgba(0, 0, 0, 0.1)
     );
+    border-radius: 2px;
+  }
+
+  a:hover {
+    background: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.3),
+      rgba(0, 0, 0, 0.3)
+    );
     border-left: 4px solid #e06900;
   }
 
